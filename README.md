@@ -9,7 +9,7 @@ To set a custom timer resolution, press "Start" in the normal version. In the mi
 
 Restart the program in order for the changes to apply.
 
-## Consider supporting me
+## My socials & consider supporting me
 - [Twitter](https://twitter.com/danskexd)
 - [Youtube](https://www.youtube.com/c/danskexd)
 - [Twitch](https://www.twitch.tv/lildanske)
