@@ -2,6 +2,7 @@
  * https://github.com/tebjan/TimerTool/blob/master/Sources/WinApiCalls.cs
  * https://www.fluxbytes.com/csharp/how-to-register-a-global-hotkey-for-your-application-in-c/
  * https://gallery.technet.microsoft.com/scriptcenter/c-PowerShell-wrapper-6465e028
+ * https://csharp.developreference.com/article/24067983/Clear+the+windows+7+standby+memory+programmatically
  */
 
 using System;
