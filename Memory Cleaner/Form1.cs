@@ -3,6 +3,7 @@
  * https://github.com/tebjan/TimerTool/blob/master/Sources/WinApiCalls.cs
  * https://www.fluxbytes.com/csharp/how-to-register-a-global-hotkey-for-your-application-in-c/
  * https://gallery.technet.microsoft.com/scriptcenter/c-PowerShell-wrapper-6465e028
+ * https://csharp.developreference.com/article/24067983/Clear+the+windows+7+standby+memory+programmatically
  */
 
 using System;
@@ -70,8 +71,11 @@ namespace Memory_Cleaner
         [DllImport("advapi32.dll", SetLastError = true)]
         internal static extern bool AdjustTokenPrivileges(IntPtr htok, bool disall, ref TokPriv1Luid newst, int len, IntPtr prev, IntPtr relen);
 
-        [DllImport("ntdll.dll")]
+        [DllImport("ntdll.dll", SetLastError = true)]
         public static extern UInt32 NtSetSystemInformation(int InfoClass, IntPtr Info, int Length);
+
+        [DllImport("psapi.dll", SetLastError = true)]
+        static extern int EmptyWorkingSet(IntPtr hwProc);
 
         [DllImport("ntdll.dll", SetLastError = true)]
         public static extern void NtSetTimerResolution(uint DesiredResolution, bool SetResolution, ref uint CurrentResolution);
@@ -84,13 +88,6 @@ namespace Memory_Cleaner
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
-        const int SE_PRIVILEGE_ENABLED = 2;
-        const string SE_INCREASE_QUOTA_NAME = "SeIncreaseQuotaPrivilege";
-        const string SE_PROFILE_SINGLE_PROCESS_NAME = "SeProfileSingleProcessPrivilege";
-        const int SystemFileCacheInformation = 0x0015;
-        const int SystemMemoryListInformation = 0x0050;
-        const int MemoryPurgeStandbyList = 4;
 
         enum KeyModifier
         {
@@ -241,185 +238,14 @@ namespace Memory_Cleaner
 
         public static Timer NtQueryTimerResolution()
         {
-            var i = new Timer();
-            var result = NtQueryTimerResolution(out i.PeriodMin, out i.PeriodMax, out i.PeriodCurrent);
-            return i;
+            var a = new Timer();
+            var result = NtQueryTimerResolution(out a.PeriodMin, out a.PeriodMax, out a.PeriodCurrent);
+            return a;
         }
 
-        private void ClearStandbyList(bool ClearStandbyCache)
+        private void HotkeyCheck()
         {
-            try
-            {
-                if (SetIncreasePrivilege(SE_INCREASE_QUOTA_NAME))
-                {
-                    uint num1;
-                    int SystemInfoLength;
-                    GCHandle gcHandle;
-                    SYSTEM_CACHE_INFORMATION_64_BIT information64Bit = new SYSTEM_CACHE_INFORMATION_64_BIT();
-                    information64Bit.MinimumWorkingSet = -1L;
-                    information64Bit.MaximumWorkingSet = -1L;
-                    SystemInfoLength = Marshal.SizeOf(information64Bit);
-                    gcHandle = GCHandle.Alloc(information64Bit, GCHandleType.Pinned);
-                    num1 = NtSetSystemInformation(SystemFileCacheInformation, gcHandle.AddrOfPinnedObject(), SystemInfoLength);
-                    gcHandle.Free();
-                }
-                if (ClearStandbyCache && SetIncreasePrivilege(SE_PROFILE_SINGLE_PROCESS_NAME))
-                {
-                    int SystemInfoLength = Marshal.SizeOf(MemoryPurgeStandbyList);
-                    GCHandle gcHandle = GCHandle.Alloc(MemoryPurgeStandbyList, GCHandleType.Pinned);
-                    uint num2 = NtSetSystemInformation(SystemMemoryListInformation, gcHandle.AddrOfPinnedObject(), SystemInfoLength);
-                    gcHandle.Free();
-                    if (num2 != 0)
-                        throw new Exception("NtSetSystemInformation(SYSTEMMEMORYLISTINFORMATION) error: ", new Win32Exception(Marshal.GetLastWin32Error()));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private static bool SetIncreasePrivilege(string privilegeName)
-        {
-            using (WindowsIdentity current = WindowsIdentity.GetCurrent(TokenAccessLevels.Query | TokenAccessLevels.AdjustPrivileges))
-            {
-                TokPriv1Luid newst;
-                newst.Count = 1;
-                newst.Luid = 0L;
-                newst.Attr = SE_PRIVILEGE_ENABLED;
-                if (!LookupPrivilegeValue(null, privilegeName, ref newst.Luid))
-                    throw new Exception("Error in LookupPrivilegeValue: ", new Win32Exception(Marshal.GetLastWin32Error()));
-                int num = AdjustTokenPrivileges(current.Token, false, ref newst, 0, IntPtr.Zero, IntPtr.Zero) ? 1 : 0;
-                if (num == 0)
-                    throw new Exception("Error in AdjustTokenPrivileges: ", new Win32Exception(Marshal.GetLastWin32Error()));
-                return num != 0;
-            }
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-        }
-
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            this.WindowState = FormWindowState.Normal;
-        }
-
-        private void ButtonStart_Click(object sender, EventArgs e)
-        {
-            NtSetTimerResolution();
-        }
-
-        private void ButtonStop_Click(object sender, EventArgs e)
-        {
-            NtUnSetTimerResolution();
-        }
-
-        private void ButtonMinimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void ButtonCleanupsystemmemory_Click(object sender, EventArgs e)
-        {
-            ClearStandbyList(true);
-        }
-
-        private void ButtonSaveSettings_Click(object sender, EventArgs e)
-        {
-            RegistryKey key1 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-            key1.SetValue("DesiredTimerRes", textBox7.Text);
-            key1.Close();
-
-            RegistryKey key2 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-            key2.SetValue("Hotkey", textBox9.Text);
-            key2.Close();
-
-            if (checkBox1.Checked == true)
-            {
-                RegistryKey key3 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-                key3.SetValue("AutoStart", "1");
-                key3.Close();
-            }
-            else if (checkBox1.Checked == false)
-            {
-                RegistryKey key4 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-                key4.SetValue("AutoStart", "0");
-                key4.Close();
-            }
-
-            if (checkBox2.Checked == true)
-            {
-                RegistryKey key5 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-                key5.SetValue("Hide", "1");
-                key5.Close();
-            }
-            else if (checkBox2.Checked == false)
-            {
-                RegistryKey key6 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-                key6.SetValue("Hide", "0");
-                key6.Close();
-            }
-        }
-
-        private void ButtonTwitter_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://twitter.com/danskexd");
-        }
-
-        private void ButtonGitHub_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/danskee");
-        }
-
-        private void Exit(object sender, EventArgs e)
-        {
-            System.Windows.Forms.Application.Exit();
-            UnregisterHotKey(this.Handle, 1);
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            UnregisterHotKey(this.Handle, 1);
-        }
-
-        private void InitializeRAMCounter()
-        {
-            ramC = new PerformanceCounter("Memory", "Available MBytes", true);
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);
-
-            if (m.Msg == 0x0312)
-            {
-                ClearStandbyList(true);
-            }
-        }
-
-        void Timer1Tick(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.ShowInTaskbar = false;
-                this.Hide();
-                this.WindowState = FormWindowState.Minimized;
-            }
-
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.ShowInTaskbar = true;
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-            }
-
             string HK = textBox9.Text;
-            string CurrentTimerRes = (NtQueryTimerResolution().PeriodCurrent / 10000.0) + " ms";
-            textBox2.Text = Convert.ToInt32(ramC.NextValue()).ToString() + " MB";
-            textBox5.Text = CurrentTimerRes;
 
             if (HK == "F1")
             {
@@ -481,6 +307,204 @@ namespace Memory_Cleaner
                 UnregisterHotKey(this.Handle, 1);
                 RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F12.GetHashCode());
             }
+        }
+
+        private void EmptyWorkingSet()
+        {
+            string ProcessName = string.Empty;
+            Process[] allProcesses = Process.GetProcesses();
+            List<string> successProcesses = new List<string>();
+            List<string> failProcesses = new List<string>();
+            for (int i = 0; i < allProcesses.Length; i++)
+            {
+                Process p = new Process();
+                p = allProcesses[i];
+                try
+                {
+                    ProcessName = p.ProcessName;
+                    EmptyWorkingSet(p.Handle);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private void ClearStandbyList()
+        {
+            try
+            {
+                if (SetIncreasePrivilege("SeIncreaseQuotaPrivilege"))
+                {
+                    int SystemInfoLength = Marshal.SizeOf(4);
+                    GCHandle gcHandle = GCHandle.Alloc(4, GCHandleType.Pinned);
+                    SYSTEM_CACHE_INFORMATION_64_BIT information64Bit = new SYSTEM_CACHE_INFORMATION_64_BIT();
+                    information64Bit.MinimumWorkingSet = -1L;
+                    information64Bit.MaximumWorkingSet = -1L;
+                    SystemInfoLength = Marshal.SizeOf(information64Bit);
+                    gcHandle = GCHandle.Alloc(information64Bit, GCHandleType.Pinned);
+                    if (NtSetSystemInformation(80, gcHandle.AddrOfPinnedObject(), Marshal.SizeOf(4)) != 0)
+                    {
+                        throw new Exception("NtSetSystemInformation: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                    }
+                    gcHandle.Free();
+                }
+                if (SetIncreasePrivilege("SeProfileSingleProcessPrivilege"))
+                {
+                    GCHandle gcHandle = GCHandle.Alloc(4, GCHandleType.Pinned);
+                    if (NtSetSystemInformation(0x0050, gcHandle.AddrOfPinnedObject(), Marshal.SizeOf(4)) != 0)
+                    {
+                        throw new Exception("NtSetSystemInformation: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                    }
+                    gcHandle.Free();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private static bool SetIncreasePrivilege(string privilegeName)
+        {
+            using (WindowsIdentity current = WindowsIdentity.GetCurrent(TokenAccessLevels.Query | TokenAccessLevels.AdjustPrivileges))
+            {
+                TokPriv1Luid newst;
+                newst.Count = 1;
+                newst.Luid = 0L;
+                newst.Attr = 2;
+                int num = AdjustTokenPrivileges(current.Token, false, ref newst, 0, IntPtr.Zero, IntPtr.Zero) ? 1 : 0;
+                return num != 0;
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            HotkeyCheck();
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void ButtonStart_Click(object sender, EventArgs e)
+        {
+            NtSetTimerResolution();
+        }
+
+        private void ButtonStop_Click(object sender, EventArgs e)
+        {
+            NtUnSetTimerResolution();
+        }
+
+        private void ButtonMinimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void ButtonCleanupsystemmemory_Click(object sender, EventArgs e)
+        {
+            ClearStandbyList();
+            EmptyWorkingSet();
+        }
+
+        private void ButtonSaveSettings_Click(object sender, EventArgs e)
+        {
+            RegistryKey key1 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key1.SetValue("DesiredTimerRes", textBox7.Text);
+            key1.Close();
+
+            RegistryKey key2 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key2.SetValue("Hotkey", textBox9.Text);
+            key2.Close();
+
+            if (checkBox1.Checked == true)
+            {
+                RegistryKey key3 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+                key3.SetValue("AutoStart", "1");
+                key3.Close();
+            }
+            else if (checkBox1.Checked == false)
+            {
+                RegistryKey key4 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+                key4.SetValue("AutoStart", "0");
+                key4.Close();
+            }
+
+            if (checkBox2.Checked == true)
+            {
+                RegistryKey key5 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+                key5.SetValue("Hide", "1");
+                key5.Close();
+            }
+            else if (checkBox2.Checked == false)
+            {
+                RegistryKey key6 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+                key6.SetValue("Hide", "0");
+                key6.Close();
+            }
+
+            HotkeyCheck();
+        }
+
+        private void ButtonTwitter_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://twitter.com/danskexd");
+        }
+
+        private void ButtonGitHub_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/danskee");
+        }
+
+        private void Exit(object sender, EventArgs e)
+        {
+            Application.Exit();
+            UnregisterHotKey(this.Handle, 1);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            UnregisterHotKey(this.Handle, 1);
+        }
+
+        private void InitializeRAMCounter()
+        {
+            ramC = new PerformanceCounter("Memory", "Available MBytes", true);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == 0x0312)
+            {
+                ClearStandbyList();
+                EmptyWorkingSet();
+            }
+        }
+
+        void Timer1Tick(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.ShowInTaskbar = false;
+                this.Hide();
+                this.WindowState = FormWindowState.Minimized;
+            }
+
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+                this.ShowInTaskbar = true;
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+            }
+
+            textBox2.Text = Convert.ToInt32(ramC.NextValue()).ToString() + " MB";
+            textBox5.Text = (NtQueryTimerResolution().PeriodCurrent / 10000.0) + " ms";
         }
     }
 }

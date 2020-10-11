@@ -42,7 +42,7 @@
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "Memory Cleaner Mini v1.0.0";
+            this.notifyIcon1.Text = "Memory Cleaner Mini v1.1.0";
             this.notifyIcon1.Visible = true;
             // 
             // contextMenuStrip1
@@ -80,12 +80,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(104, 0);
+            this.ClientSize = new System.Drawing.Size(116, 0);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Memory Cleaner Mini v1.0.0";
+            this.Text = "Memory Cleaner Mini v1.1.0";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_Closed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);

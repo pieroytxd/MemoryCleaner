@@ -57,7 +57,7 @@ namespace Memory_Cleaner
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "Memory Cleaner v1.0.0";
+            this.notifyIcon1.Text = "Memory Cleaner v1.1.0";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
@@ -100,10 +100,10 @@ namespace Memory_Cleaner
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(0, 4);
+            this.tabControl1.Location = new System.Drawing.Point(2, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(352, 399);
+            this.tabControl1.Size = new System.Drawing.Size(350, 399);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -121,7 +121,7 @@ namespace Memory_Cleaner
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(344, 373);
+            this.tabPage1.Size = new System.Drawing.Size(342, 373);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -133,6 +133,7 @@ namespace Memory_Cleaner
             this.textBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox10.Location = new System.Drawing.Point(12, 30);
             this.textBox10.Name = "textBox10";
+            this.textBox10.ReadOnly = true;
             this.textBox10.Size = new System.Drawing.Size(205, 16);
             this.textBox10.TabIndex = 11;
             this.textBox10.Text = "Current available memory:";
@@ -151,6 +152,7 @@ namespace Memory_Cleaner
             this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox8.Location = new System.Drawing.Point(12, 108);
             this.textBox8.Name = "textBox8";
+            this.textBox8.ReadOnly = true;
             this.textBox8.Size = new System.Drawing.Size(205, 16);
             this.textBox8.TabIndex = 9;
             this.textBox8.Text = "Hotkey to clean up the memory:";
@@ -169,6 +171,7 @@ namespace Memory_Cleaner
             this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox6.Location = new System.Drawing.Point(12, 82);
             this.textBox6.Name = "textBox6";
+            this.textBox6.ReadOnly = true;
             this.textBox6.Size = new System.Drawing.Size(205, 16);
             this.textBox6.TabIndex = 7;
             this.textBox6.Text = "Desired timer resolution:";
@@ -187,6 +190,7 @@ namespace Memory_Cleaner
             this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox4.Location = new System.Drawing.Point(12, 57);
             this.textBox4.Name = "textBox4";
+            this.textBox4.ReadOnly = true;
             this.textBox4.Size = new System.Drawing.Size(205, 16);
             this.textBox4.TabIndex = 5;
             this.textBox4.Text = "Current timer resolution:";
@@ -206,14 +210,14 @@ namespace Memory_Cleaner
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(344, 373);
+            this.tabPage2.Size = new System.Drawing.Size(342, 373);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "About";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // ButtonGitHub
             // 
-            this.ButtonGitHub.Location = new System.Drawing.Point(5, 58);
+            this.ButtonGitHub.Location = new System.Drawing.Point(5, 56);
             this.ButtonGitHub.Name = "ButtonGitHub";
             this.ButtonGitHub.Size = new System.Drawing.Size(48, 23);
             this.ButtonGitHub.TabIndex = 2;
@@ -223,7 +227,7 @@ namespace Memory_Cleaner
             // 
             // ButtonTwitter
             // 
-            this.ButtonTwitter.Location = new System.Drawing.Point(5, 28);
+            this.ButtonTwitter.Location = new System.Drawing.Point(5, 27);
             this.ButtonTwitter.Name = "ButtonTwitter";
             this.ButtonTwitter.Size = new System.Drawing.Size(47, 23);
             this.ButtonTwitter.TabIndex = 1;
@@ -238,13 +242,14 @@ namespace Memory_Cleaner
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(5, 5);
             this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(205, 16);
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = "Program developed by Danske";
             // 
             // ButtonStart
             // 
-            this.ButtonStart.Location = new System.Drawing.Point(1, 406);
+            this.ButtonStart.Location = new System.Drawing.Point(2, 405);
             this.ButtonStart.Name = "ButtonStart";
             this.ButtonStart.Size = new System.Drawing.Size(37, 23);
             this.ButtonStart.TabIndex = 3;
@@ -254,7 +259,7 @@ namespace Memory_Cleaner
             // 
             // ButtonStop
             // 
-            this.ButtonStop.Location = new System.Drawing.Point(40, 406);
+            this.ButtonStop.Location = new System.Drawing.Point(41, 405);
             this.ButtonStop.Name = "ButtonStop";
             this.ButtonStop.Size = new System.Drawing.Size(37, 23);
             this.ButtonStop.TabIndex = 4;
@@ -264,7 +269,7 @@ namespace Memory_Cleaner
             // 
             // ButtonMinimize
             // 
-            this.ButtonMinimize.Location = new System.Drawing.Point(79, 406);
+            this.ButtonMinimize.Location = new System.Drawing.Point(80, 405);
             this.ButtonMinimize.Name = "ButtonMinimize";
             this.ButtonMinimize.Size = new System.Drawing.Size(55, 23);
             this.ButtonMinimize.TabIndex = 5;
@@ -275,7 +280,7 @@ namespace Memory_Cleaner
             // ButtonCleanupsystemmemory
             // 
             this.ButtonCleanupsystemmemory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ButtonCleanupsystemmemory.Location = new System.Drawing.Point(137, 406);
+            this.ButtonCleanupsystemmemory.Location = new System.Drawing.Point(137, 405);
             this.ButtonCleanupsystemmemory.Name = "ButtonCleanupsystemmemory";
             this.ButtonCleanupsystemmemory.Size = new System.Drawing.Size(131, 23);
             this.ButtonCleanupsystemmemory.TabIndex = 6;
@@ -286,7 +291,7 @@ namespace Memory_Cleaner
             // ButtonSaveSettings
             // 
             this.ButtonSaveSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ButtonSaveSettings.Location = new System.Drawing.Point(271, 406);
+            this.ButtonSaveSettings.Location = new System.Drawing.Point(270, 405);
             this.ButtonSaveSettings.Name = "ButtonSaveSettings";
             this.ButtonSaveSettings.Size = new System.Drawing.Size(81, 23);
             this.ButtonSaveSettings.TabIndex = 7;
@@ -320,7 +325,7 @@ namespace Memory_Cleaner
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Memory Cleaner v1.0.0";
+            this.Text = "Memory Cleaner v1.1.0";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);

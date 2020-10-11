@@ -63,6 +63,9 @@ namespace Memory_Cleaner_Mini
         [DllImport("ntdll.dll")]
         public static extern UInt32 NtSetSystemInformation(int InfoClass, IntPtr Info, int Length);
 
+        [DllImport("psapi.dll", SetLastError = true)]
+        static extern int EmptyWorkingSet(IntPtr hwProc);
+
         [DllImport("ntdll.dll", SetLastError = true)]
         public static extern void NtSetTimerResolution(uint DesiredResolution, bool SetResolution, ref uint CurrentResolution);
 
@@ -71,13 +74,6 @@ namespace Memory_Cleaner_Mini
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
-        const int SE_PRIVILEGE_ENABLED = 2;
-        const string SE_INCREASE_QUOTA_NAME = "SeIncreaseQuotaPrivilege";
-        const string SE_PROFILE_SINGLE_PROCESS_NAME = "SeProfileSingleProcessPrivilege";
-        const int SystemFileCacheInformation = 0x0015;
-        const int SystemMemoryListInformation = 0x0050;
-        const int MemoryPurgeStandbyList = 4;
 
         enum KeyModifier
         {
@@ -198,31 +194,54 @@ namespace Memory_Cleaner_Mini
             }
         }
 
-        private void ClearStandbyList(bool ClearStandbyCache)
+        private void EmptyWorkingSet()
+        {
+            string ProcessName = string.Empty;
+            Process[] allProcesses = Process.GetProcesses();
+            List<string> successProcesses = new List<string>();
+            List<string> failProcesses = new List<string>();
+            for (int i = 0; i < allProcesses.Length; i++)
+            {
+                Process p = new Process();
+                p = allProcesses[i];
+                try
+                {
+                    ProcessName = p.ProcessName;
+                    EmptyWorkingSet(p.Handle);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private void ClearStandbyList()
         {
             try
             {
-                if (SetIncreasePrivilege(SE_INCREASE_QUOTA_NAME))
+                if (SetIncreasePrivilege("SeIncreaseQuotaPrivilege"))
                 {
-                    uint num1;
-                    int SystemInfoLength;
-                    GCHandle gcHandle;
+                    int SystemInfoLength = Marshal.SizeOf(4);
+                    GCHandle gcHandle = GCHandle.Alloc(4, GCHandleType.Pinned);
                     SYSTEM_CACHE_INFORMATION_64_BIT information64Bit = new SYSTEM_CACHE_INFORMATION_64_BIT();
                     information64Bit.MinimumWorkingSet = -1L;
                     information64Bit.MaximumWorkingSet = -1L;
                     SystemInfoLength = Marshal.SizeOf(information64Bit);
                     gcHandle = GCHandle.Alloc(information64Bit, GCHandleType.Pinned);
-                    num1 = NtSetSystemInformation(SystemFileCacheInformation, gcHandle.AddrOfPinnedObject(), SystemInfoLength);
+                    if (NtSetSystemInformation(80, gcHandle.AddrOfPinnedObject(), Marshal.SizeOf(4)) != 0)
+                    {
+                        throw new Exception("NtSetSystemInformation: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                    }
                     gcHandle.Free();
                 }
-                if (ClearStandbyCache && SetIncreasePrivilege(SE_PROFILE_SINGLE_PROCESS_NAME))
+                if (SetIncreasePrivilege("SeProfileSingleProcessPrivilege"))
                 {
-                    int SystemInfoLength = Marshal.SizeOf(MemoryPurgeStandbyList);
-                    GCHandle gcHandle = GCHandle.Alloc(MemoryPurgeStandbyList, GCHandleType.Pinned);
-                    uint num2 = NtSetSystemInformation(SystemMemoryListInformation, gcHandle.AddrOfPinnedObject(), SystemInfoLength);
+                    GCHandle gcHandle = GCHandle.Alloc(4, GCHandleType.Pinned);
+                    if (NtSetSystemInformation(0x0050, gcHandle.AddrOfPinnedObject(), Marshal.SizeOf(4)) != 0)
+                    {
+                        throw new Exception("NtSetSystemInformation: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                    }
                     gcHandle.Free();
-                    if (num2 != 0)
-                        throw new Exception("NtSetSystemInformation(SYSTEMMEMORYLISTINFORMATION) error: ", new Win32Exception(Marshal.GetLastWin32Error()));
                 }
             }
             catch (Exception ex)
@@ -238,12 +257,8 @@ namespace Memory_Cleaner_Mini
                 TokPriv1Luid newst;
                 newst.Count = 1;
                 newst.Luid = 0L;
-                newst.Attr = SE_PRIVILEGE_ENABLED;
-                if (!LookupPrivilegeValue(null, privilegeName, ref newst.Luid))
-                    throw new Exception("Error in LookupPrivilegeValue: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                newst.Attr = 2;
                 int num = AdjustTokenPrivileges(current.Token, false, ref newst, 0, IntPtr.Zero, IntPtr.Zero) ? 1 : 0;
-                if (num == 0)
-                    throw new Exception("Error in AdjustTokenPrivileges: ", new Win32Exception(Marshal.GetLastWin32Error()));
                 return num != 0;
             }
         }
@@ -275,7 +290,8 @@ namespace Memory_Cleaner_Mini
 
             if (m.Msg == 0x0312)
             {
-                ClearStandbyList(true);
+                ClearStandbyList();
+                EmptyWorkingSet();
             }
         }
     }
