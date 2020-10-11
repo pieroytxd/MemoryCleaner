@@ -1,9 +1,0 @@
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\bin\Debug\Memory Cleaner Mini.exe.config
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\bin\Debug\Memory Cleaner Mini.exe
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\bin\Debug\Memory Cleaner Mini.pdb
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\obj\Debug\Memory_Cleaner_Mini.Form1.resources
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\obj\Debug\Memory_Cleaner_Mini.Properties.Resources.resources
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\obj\Debug\Memory Cleaner Mini.csproj.GenerateResource.cache
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\obj\Debug\Memory Cleaner Mini.csproj.CoreCompileInputs.cache
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\obj\Debug\Memory Cleaner Mini.exe
-E:\Programs\Memory Cleaner Mini\Memory Cleaner Mini\obj\Debug\Memory Cleaner Mini.pdb
