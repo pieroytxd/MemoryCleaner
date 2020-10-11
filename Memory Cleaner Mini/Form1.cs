@@ -228,18 +228,15 @@ namespace Memory_Cleaner_Mini
                     information64Bit.MaximumWorkingSet = -1L;
                     SystemInfoLength = Marshal.SizeOf(information64Bit);
                     gcHandle = GCHandle.Alloc(information64Bit, GCHandleType.Pinned);
-                    if (NtSetSystemInformation(80, gcHandle.AddrOfPinnedObject(), Marshal.SizeOf(4)) != 0)
-                    {
-                        throw new Exception("NtSetSystemInformation: ", new Win32Exception(Marshal.GetLastWin32Error()));
-                    }
                     gcHandle.Free();
                 }
                 if (SetIncreasePrivilege("SeProfileSingleProcessPrivilege"))
                 {
                     GCHandle gcHandle = GCHandle.Alloc(4, GCHandleType.Pinned);
-                    if (NtSetSystemInformation(0x0050, gcHandle.AddrOfPinnedObject(), Marshal.SizeOf(4)) != 0)
+                    uint num = NtSetSystemInformation(80, gcHandle.AddrOfPinnedObject(), Marshal.SizeOf(4));
+                    if (num != 0)
                     {
-                        throw new Exception("NtSetSystemInformation: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                        throw new Exception("NtSetSystemInformation(SYSTEMMEMORYLISTINFORMATION) error: ", new Win32Exception(Marshal.GetLastWin32Error()));
                     }
                     gcHandle.Free();
                 }
@@ -258,7 +255,15 @@ namespace Memory_Cleaner_Mini
                 newst.Count = 1;
                 newst.Luid = 0L;
                 newst.Attr = 2;
+                if (!LookupPrivilegeValue(null, privilegeName, ref newst.Luid))
+                {
+                    throw new Exception("Error in LookupPrivilegeValue: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                }
                 int num = AdjustTokenPrivileges(current.Token, false, ref newst, 0, IntPtr.Zero, IntPtr.Zero) ? 1 : 0;
+                if (num == 0)
+                {
+                    throw new Exception("Error in AdjustTokenPrivileges: ", new Win32Exception(Marshal.GetLastWin32Error()));
+                }
                 return num != 0;
             }
         }
