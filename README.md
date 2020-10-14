@@ -1,7 +1,7 @@
 ## Memory Cleaner
 ![Memory Cleaner](https://cdn.discordapp.com/attachments/759162962325143623/763515874501984317/unknown.png)
 ## Description
-Real-time application that displays your current available amount of RAM and your current timer resolution in milliseconds, lets you set a custom timer resolution and clear the standby list and the working set with a custom hotkey. Two versions of this app exist, the "mini" version that's really light and doesn't have a GUI and the bit heavier one that's the normal version with a GUI. It stores the settings in registry in the following path "HKEY_CURRENT_USER\Software\Memory Cleaner\Settings".
+Real-time application that displays your current available amount of RAM and your current timer resolution in milliseconds, lets you set a custom timer resolution and clear the standby list and the working sets with a custom hotkey. Two versions of this app exist, the "mini" version that's really light and doesn't have a GUI and the bit heavier one that's the normal version with a GUI. It stores the settings in registry in the following path "HKEY_CURRENT_USER\Software\Memory Cleaner\Settings".
 ## Usage
 To clean the standby list, just press the specificed hotkey. The range for the hotkeys is currently F1 - F12, although F12 doesn't work due to it being a debug hotkey. To change the hotkey, use the GUI and click "Save Settings". For the mini version, open regedit and navigate to this path: "HKEY_CURRENT_USER\Software\Memory Cleaner\Settings" and change the "Hotkey" value to whatever you desire that's between F1 and F11.
 
