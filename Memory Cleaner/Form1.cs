@@ -28,6 +28,7 @@ using System.Resources;
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.Drawing.Text;
+using System.Net.Http.Headers;
 
 namespace Memory_Cleaner
 {
@@ -92,13 +93,46 @@ namespace Memory_Cleaner
         enum KeyModifier
         {
             None = 0,
+            Alt = 1,
+            Ctrl = 2,
+            Shift = 4,
         }
 
         public Form1()
         {
             InitializeComponent();
             InitializeRAMCounter();
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            comboBox1.Items.Add("None");
+            comboBox1.Items.Add("Alt");
+            comboBox1.Items.Add("Ctrl");
+            comboBox1.Items.Add("Shift");
+
+            comboBox2.Items.Add("F1");
+            comboBox2.Items.Add("F2");
+            comboBox2.Items.Add("F3");
+            comboBox2.Items.Add("F4");
+            comboBox2.Items.Add("F5");
+            comboBox2.Items.Add("F6");
+            comboBox2.Items.Add("F7");
+            comboBox2.Items.Add("F8");
+            comboBox2.Items.Add("F9");
+            comboBox2.Items.Add("F10");
+            comboBox2.Items.Add("F11");
+            comboBox2.Items.Add("Home");
+            comboBox2.Items.Add("Insert");
+            comboBox2.Items.Add("PageUp");
+            comboBox2.Items.Add("PageDown");
+            comboBox2.Items.Add("CapsLock");
+
+            comboBox3.Items.Add("0.5s");
+            comboBox3.Items.Add("1s");
+            comboBox3.Items.Add("2s");
+            comboBox3.Items.Add("5s");
+            comboBox3.Items.Add("10s");
+
+            comboBox4.Items.Add("True");
+            comboBox4.Items.Add("False");
 
             RegistryKey key1 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
             key1.Close();
@@ -129,6 +163,19 @@ namespace Memory_Cleaner
                 key4.Close();
             }
 
+            RegistryKey key18 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            Object i = key18.GetValue("HotkeyModifier");
+            if (i != null)
+            {
+            }
+            else
+            {
+                RegistryKey key19 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+                key19.SetValue("HotkeyModifier", "None");
+                key19.Close();
+                key18.Close();
+            }
+
             RegistryKey key6 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
             Object c = key6.GetValue("AutoStart");
             if (c != null)
@@ -155,6 +202,32 @@ namespace Memory_Cleaner
                 key8.Close();
             }
 
+            RegistryKey key22 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            Object l = key22.GetValue("TimerPollingInterval");
+            if (l != null)
+            {
+            }
+            else
+            {
+                RegistryKey key23 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+                key23.SetValue("TimerPollingInterval", "1s");
+                key23.Close();
+                key22.Close();
+            }
+
+            RegistryKey key24 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            Object m = key24.GetValue("TimerEnabled");
+            if (m != null)
+            {
+            }
+            else
+            {
+                RegistryKey key25 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+                key25.SetValue("TimerEnabled", "True");
+                key25.Close();
+                key24.Close();
+            }
+
             RegistryKey key10 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
             Object e = key10.GetValue("DesiredTimerRes");
             if (e != null)
@@ -176,48 +249,110 @@ namespace Memory_Cleaner
             Object f = key12.GetValue("Hotkey");
             if (f != null)
             {
-                textBox9.Text = (f.ToString());
+                comboBox2.Text = (f.ToString());
                 key12.Close();
             }
             else
             {
-                textBox9.Text = "F10";
+                comboBox2.Text = "F10";
                 key12.Close();
             }
 
             RegistryKey key13 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-            key13.SetValue("Hotkey", textBox9.Text);
+            key13.SetValue("Hotkey", comboBox2.Text);
             key13.Close();
 
             RegistryKey key14 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-            Object g = key14.GetValue("AutoStart");
-            if ((g.ToString()) == "1")
+            Object g = key14.GetValue("HotkeyModifier");
+            if (g != null)
             {
-                checkBox1.Checked = true;
+                comboBox1.Text = (g.ToString());
                 key14.Close();
-                NtSetTimerResolution();
             }
-            else if ((g.ToString()) == "0")
+            else
             {
-                checkBox1.Checked = false;
+                comboBox1.Text = "None";
                 key14.Close();
-                NtUnSetTimerResolution();
             }
 
-            RegistryKey key15 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-            Object h = key15.GetValue("Hide");
+            RegistryKey key15 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key15.SetValue("HotkeyModifier", comboBox1.Text);
+            key15.Close();
+
+            RegistryKey key16 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            Object h = key16.GetValue("AutoStart");
             if ((h.ToString()) == "1")
             {
-                checkBox2.Checked = true;
-                key15.Close();
-                this.WindowState = FormWindowState.Minimized;
+                checkBox1.Checked = true;
+                key16.Close();
+                NtSetTimerResolution();
             }
             else if ((h.ToString()) == "0")
             {
-                checkBox2.Checked = false;
-                key15.Close();
-                this.WindowState = FormWindowState.Normal;
+                checkBox1.Checked = false;
+                key16.Close();
+                NtUnSetTimerResolution();
             }
+
+            RegistryKey key17 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            Object j = key17.GetValue("Hide");
+            if ((j.ToString()) == "1")
+            {
+                checkBox2.Checked = true;
+                key17.Close();
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.ShowInTaskbar = false;
+                this.Hide();
+                this.WindowState = FormWindowState.Minimized;
+            }
+            else if ((j.ToString()) == "0")
+            {
+                checkBox2.Checked = false;
+                key17.Close();
+                this.WindowState = FormWindowState.Normal;
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+                this.ShowInTaskbar = true;
+                this.Show();
+            }
+
+            RegistryKey key20 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            Object k = key20.GetValue("TimerPollingInterval");
+            if (k != null)
+            {
+                comboBox3.Text = (k.ToString());
+                key20.Close();
+            }
+            else
+            {
+                comboBox3.Text = "1s";
+                key20.Close();
+            }
+
+            RegistryKey key21 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key21.SetValue("TimerPollingInterval", comboBox3.Text);
+            key21.Close();
+
+            RegistryKey key26 = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            Object n = key26.GetValue("TimerEnabled");
+            if (n != null)
+            {
+                comboBox4.Text = (n.ToString());
+                key26.Close();
+            }
+            else
+            {
+                comboBox3.Text = "True";
+                key26.Close();
+            }
+
+            RegistryKey key27 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key27.SetValue("TimerEnabled", comboBox4.Text);
+            key27.Close();
+
+            HotkeyCheck();
+            TimerCheck();
+            textBox2.Text = Convert.ToInt32(ramC.NextValue()).ToString() + " MB";
+            textBox5.Text = (NtQueryTimerResolution().PeriodCurrent / 10000.0) + " ms";
         }
 
         private void NtSetTimerResolution()
@@ -245,67 +380,433 @@ namespace Memory_Cleaner
 
         private void HotkeyCheck()
         {
-            string HK = textBox9.Text;
+            string HK = comboBox2.Text;
+            string HKM = comboBox1.Text;
 
             if (HK == "F1")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F1.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F1.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F1.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F1.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F1.GetHashCode());
+                }
             }
-            else if (HK == "F2")
+
+            if (HK == "F2")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F2.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F2.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F2.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F2.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F2.GetHashCode());
+                }
             }
-            else if (HK == "F3")
+
+            if (HK == "F3")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F3.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F3.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F3.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F3.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F3.GetHashCode());
+                }
             }
-            else if (HK == "F4")
+
+            if (HK == "F4")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F4.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F4.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F4.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F4.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F4.GetHashCode());
+                }
             }
-            else if (HK == "F5")
+
+            if (HK == "F5")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F5.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F5.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F5.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F5.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F5.GetHashCode());
+                }
             }
-            else if (HK == "F6")
+
+            if (HK == "F6")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F6.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F6.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F6.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F6.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F6.GetHashCode());
+                }
             }
-            else if (HK == "F7")
+
+            if (HK == "F7")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F7.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F7.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F7.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F7.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F7.GetHashCode());
+                }
             }
-            else if (HK == "F8")
+
+            if (HK == "F8")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F8.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F8.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F8.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F8.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F8.GetHashCode());
+                }
             }
-            else if (HK == "F9")
+
+            if (HK == "F9")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F9.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F9.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F9.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F9.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F9.GetHashCode());
+                }
             }
-            else if (HK == "F10")
+
+            if (HK == "F10")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F10.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F10.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F10.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F10.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F10.GetHashCode());
+                }
             }
-            else if (HK == "F11")
+
+            if (HK == "F11")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F11.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F11.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F11.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F11.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F11.GetHashCode());
+                }
             }
-            else if (HK == "F12")
+
+            if (HK == "Home")
             {
-                UnregisterHotKey(this.Handle, 1);
-                RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F12.GetHashCode());
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.Home.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.Home.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.Home.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.Home.GetHashCode());
+                }
+            }
+
+            if (HK == "Insert")
+            {
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.Insert.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.Insert.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.Insert.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.Insert.GetHashCode());
+                }
+            }
+
+            if (HK == "PageUp")
+            {
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.PageUp.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.PageUp.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.PageUp.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.PageUp.GetHashCode());
+                }
+            }
+
+            if (HK == "PageDown")
+            {
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.PageDown.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.PageDown.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.PageDown.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.PageDown.GetHashCode());
+                }
+            }
+
+            if (HK == "CapsLock")
+            {
+                if (HKM == "None")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.CapsLock.GetHashCode());
+                }
+                else if (HKM == "Alt")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.CapsLock.GetHashCode());
+                }
+                else if (HKM == "Ctrl")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.CapsLock.GetHashCode());
+                }
+                else if (HKM == "Shift")
+                {
+                    UnregisterHotKey(this.Handle, 1);
+                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.CapsLock.GetHashCode());
+                }
+            }
+        }
+
+        private void TimerCheck()
+        {
+            string T = comboBox3.Text;
+            string TE = comboBox4.Text;
+
+            if (timer1.Enabled == true)
+            {
+                if (T == "0.5s")
+                {
+                    timer1.Interval = 500;
+                }
+                else if (T == "1s")
+                {
+                    timer1.Interval = 1000;
+                }
+                else if (T == "2s")
+                {
+                    timer1.Interval = 2000;
+                }
+                else if (T == "5s")
+                {
+                    timer1.Interval = 5000;
+                }
+                else if (T == "10s")
+                {
+                    timer1.Interval = 10000;
+                }
+            }
+            else if (timer1.Enabled == false)
+            {
+            }
+
+            if (TE == "True")
+            {
+                timer1.Enabled = true;
+            }
+            else if (TE == "False")
+            {
+                timer1.Enabled = false;
             }
         }
 
@@ -385,12 +886,15 @@ namespace Memory_Cleaner
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            HotkeyCheck();
         }
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.WindowState = FormWindowState.Normal;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.ShowInTaskbar = true;
+            this.Show();
+            HotkeyCheck();
         }
 
         private void ButtonStart_Click(object sender, EventArgs e)
@@ -405,7 +909,11 @@ namespace Memory_Cleaner
 
         private void ButtonMinimize_Click(object sender, EventArgs e)
         {
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.ShowInTaskbar = false;
+            this.Hide();
             this.WindowState = FormWindowState.Minimized;
+            HotkeyCheck();
         }
 
         private void ButtonCleanupsystemmemory_Click(object sender, EventArgs e)
@@ -421,8 +929,12 @@ namespace Memory_Cleaner
             key1.Close();
 
             RegistryKey key2 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
-            key2.SetValue("Hotkey", textBox9.Text);
+            key2.SetValue("Hotkey", comboBox2.Text);
             key2.Close();
+
+            RegistryKey key7 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key7.SetValue("HotkeyModifier", comboBox1.Text);
+            key7.Close();
 
             if (checkBox1.Checked == true)
             {
@@ -450,7 +962,16 @@ namespace Memory_Cleaner
                 key6.Close();
             }
 
+            RegistryKey key8 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key8.SetValue("TimerPollingInterval", comboBox3.Text);
+            key8.Close();
+
+            RegistryKey key9 = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner\Settings");
+            key9.SetValue("TimerEnabled", comboBox4.Text);
+            key9.Close();
+
             HotkeyCheck();
+            TimerCheck();
         }
 
         private void ButtonTwitter_Click(object sender, EventArgs e)
@@ -492,22 +1013,6 @@ namespace Memory_Cleaner
 
         void Timer1Tick(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.ShowInTaskbar = false;
-                this.Hide();
-                this.WindowState = FormWindowState.Minimized;
-            }
-
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                this.FormBorderStyle = FormBorderStyle.FixedSingle;
-                this.ShowInTaskbar = true;
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-            }
-
             textBox2.Text = Convert.ToInt32(ramC.NextValue()).ToString() + " MB";
             textBox5.Text = (NtQueryTimerResolution().PeriodCurrent / 10000.0) + " ms";
         }
