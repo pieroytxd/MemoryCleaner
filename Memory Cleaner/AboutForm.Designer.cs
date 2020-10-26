@@ -136,7 +136,7 @@
             this.Controls.Add(this.ButtonDiscord);
             this.Controls.Add(this.ButtonClose);
             this.Controls.Add(this.TableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "AboutForm";
