@@ -24,12 +24,6 @@ namespace Memory_Cleaner
             Info.Focus();
         }
 
-        private void ButtonGitHub_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/danskee/memorycleaner");
-            Info.Focus();
-        }
-
         private void ButtonDonate_Click(object sender, EventArgs e)
         {
             Process.Start("https://paypal.me/danskexd");

@@ -33,7 +33,7 @@
             this.ButtonTwitter.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ButtonTwitter.AutoSize = true;
             this.ButtonTwitter.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonTwitter.Location = new System.Drawing.Point(4, 83);
+            this.ButtonTwitter.Location = new System.Drawing.Point(4, 81);
             this.ButtonTwitter.Name = "ButtonTwitter";
             this.ButtonTwitter.Size = new System.Drawing.Size(53, 23);
             this.ButtonTwitter.TabIndex = 61;
@@ -46,7 +46,7 @@
             this.ButtonDonate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ButtonDonate.AutoSize = true;
             this.ButtonDonate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonDonate.Location = new System.Drawing.Point(61, 83);
+            this.ButtonDonate.Location = new System.Drawing.Point(61, 81);
             this.ButtonDonate.Name = "ButtonDonate";
             this.ButtonDonate.Size = new System.Drawing.Size(56, 23);
             this.ButtonDonate.TabIndex = 60;
@@ -59,7 +59,7 @@
             this.ButtonDiscord.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ButtonDiscord.AutoSize = true;
             this.ButtonDiscord.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonDiscord.Location = new System.Drawing.Point(121, 83);
+            this.ButtonDiscord.Location = new System.Drawing.Point(121, 81);
             this.ButtonDiscord.Name = "ButtonDiscord";
             this.ButtonDiscord.Size = new System.Drawing.Size(57, 23);
             this.ButtonDiscord.TabIndex = 59;
@@ -72,7 +72,7 @@
             this.ButtonClose.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ButtonClose.AutoSize = true;
             this.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonClose.Location = new System.Drawing.Point(182, 83);
+            this.ButtonClose.Location = new System.Drawing.Point(182, 81);
             this.ButtonClose.Name = "ButtonClose";
             this.ButtonClose.Size = new System.Drawing.Size(47, 23);
             this.ButtonClose.TabIndex = 58;
@@ -86,7 +86,7 @@
             this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.TableLayoutPanel1.Controls.Add(this.Info, 0, 0);
             this.TableLayoutPanel1.Controls.Add(this.LinkGitHub, 0, 1);
-            this.TableLayoutPanel1.Location = new System.Drawing.Point(3, 5);
+            this.TableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.TableLayoutPanel1.Name = "TableLayoutPanel1";
             this.TableLayoutPanel1.RowCount = 2;
             this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
@@ -117,13 +117,13 @@
             this.LinkGitHub.TabStop = true;
             this.LinkGitHub.Text = "github.com/danskee";
             this.LinkGitHub.VisitedLinkColor = System.Drawing.Color.White;
-            this.LinkGitHub.Click += new System.EventHandler(this.ButtonGitHub_Click);
+            this.LinkGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkGitHub_Click);
             // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(231, 109);
+            this.ClientSize = new System.Drawing.Size(231, 107);
             this.Controls.Add(this.ButtonTwitter);
             this.Controls.Add(this.ButtonDonate);
             this.Controls.Add(this.ButtonDiscord);
