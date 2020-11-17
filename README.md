@@ -1,5 +1,5 @@
 ## Memory Cleaner
-![Memory Cleaner](https://cdn.discordapp.com/attachments/759162962325143623/770052939921883156/unknown.png)
+![Memory Cleaner](https://cdn.discordapp.com/attachments/759162962325143623/778296998993854484/unknown.png)
 
 ## Description
 
