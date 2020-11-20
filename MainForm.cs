@@ -20,8 +20,6 @@ using System.Security.Principal;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-// Copyright 2020 Danske
-
 namespace Memory_Cleaner
 {
     [StructLayout(LayoutKind.Sequential)]
