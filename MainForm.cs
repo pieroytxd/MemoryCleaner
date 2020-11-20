@@ -1165,9 +1165,8 @@ namespace Memory_Cleaner
                     ProcessName = p.ProcessName;
                     EmptyWorkingSet(p.Handle);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    MessageBox.Show(ex.ToString());
                 }
             }
         }
