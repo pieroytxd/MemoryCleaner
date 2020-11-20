@@ -11,4 +11,7 @@ Lightweight application for forcing the timer resolution and for cleaning the st
 ## Donation
 - [PayPal](https://www.paypal.me/danskexd)
 
+## License
+Memory Cleaner is licensed under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license. For more details, see the [LICENSE](https://github.com/danskee/MemoryCleaner/blob/main/LICENSE).
+
 Copyright 2020 Danske
