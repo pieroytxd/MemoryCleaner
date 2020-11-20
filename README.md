@@ -10,3 +10,5 @@ Lightweight application for forcing the timer resolution and for cleaning the st
 
 ## Donation
 - [PayPal](https://www.paypal.me/danskexd)
+
+Copyright 2020 Danske
