@@ -1,7 +1,7 @@
 ﻿﻿/*
     Memory Cleaner
 
-    Copyright (C) 2020 Danske
+    Copyright (C) 2021 Danske
 
     This file is part of Memory Cleaner
 
@@ -33,9 +33,9 @@ namespace Memory_Cleaner
     [StructLayout(LayoutKind.Sequential)]
     public struct Timer
     {
-        public uint PeriodMin;
-        public uint PeriodMax;
-        public uint PeriodCurrent;
+        public uint min;
+        public uint max;
+        public uint cur;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -96,15 +96,8 @@ namespace Memory_Cleaner
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-        enum KeyModifier
-        {
-            None = 0,
-            Alt = 1,
-            Ctrl = 2,
-            Shift = 4,
-        }
-
         private bool allowVisible;
+        public uint CurrentResolution;
         AboutForm AboutForm = new AboutForm();
         SettingsForm SettingsForm = new SettingsForm();
         LicenseAgreementForm LicenseAgreementForm = new LicenseAgreementForm();
@@ -248,17 +241,6 @@ namespace Memory_Cleaner
                 SettingsForm.CheckBoxEnableEmptyingOfTheWorkingSet.Checked = false;
             }
 
-            // Hotkey Modifier Key
-            if (Settings.GetValue("HotkeyModifierKey") != null)
-            {
-                SettingsForm.HotkeyModifierKey.Text = Settings.GetValue("HotkeyModifierKey").ToString();
-            }
-            else
-            {
-                SettingsForm.HotkeyModifierKey.Text = "None";
-                Settings.SetValue("HotkeyModifierKey", SettingsForm.HotkeyModifierKey.Text);
-            }
-
             // Hotkey To Clean Memory
             if (Settings.GetValue("HotkeyToCleanMemory") != null)
             {
@@ -334,37 +316,37 @@ namespace Memory_Cleaner
             SaveSettings();
         }
 
-        private void MenuItemExit_Click(object sender, EventArgs e)
+        void MenuItemExit_Click(object sender, EventArgs e)
         {
             Exit(sender, e);
             UpdateValues();
         }
 
-        private void MenuItemSettings_Click(object sender, EventArgs e)
+        void MenuItemSettings_Click(object sender, EventArgs e)
         {
             SettingsForm.ShowDialog(this);
             UpdateValues();
         }
 
-        private void MenuItemAbout_Click(object sender, EventArgs e)
+        void MenuItemAbout_Click(object sender, EventArgs e)
         {
             AboutForm.ShowDialog(this);
             UpdateValues();
         }
 
-        private void ButtonStart_Click(object sender, EventArgs e)
+        void ButtonStart_Click(object sender, EventArgs e)
         {
             SetTimerRes();
             UpdateValues();
         }
 
-        private void ButtonStop_Click(object sender, EventArgs e)
+        void ButtonStop_Click(object sender, EventArgs e)
         {
             UnSetTimerRes();
             UpdateValues();
         }
 
-        private void ButtonCleanMemory_Click(object sender, EventArgs e)
+        void ButtonCleanMemory_Click(object sender, EventArgs e)
         {
             switch (SettingsForm.CheckBoxEnableClearingOfTheStandbyList.Checked)
             {
@@ -395,18 +377,18 @@ namespace Memory_Cleaner
             UpdateValues();
         }
 
-        private void SystemTrayIcon_DoubleClick(object sender, MouseEventArgs e)
+        void SystemTrayIcon_DoubleClick(object sender, MouseEventArgs e)
         {
             Maximize();
             UpdateValues();
         }
 
-        public void MainForm_Load(object sender, EventArgs e)
+        void MainForm_Load(object sender, EventArgs e)
         {
             UpdateValues();
         }
 
-        private void MainForm_Resize(object sender, EventArgs e)
+        void MainForm_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized == this.WindowState)
             {
@@ -420,7 +402,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Exit(sender, e);
         }
@@ -466,6 +448,12 @@ namespace Memory_Cleaner
             }
         }
 
+        void Exit(Object sender, EventArgs e)
+        {
+            Application.Exit();
+            UnregisterHotKey(this.Handle, 1);
+        }
+
         protected override void SetVisibleCore(bool value)
         {
             if (!allowVisible)
@@ -476,13 +464,7 @@ namespace Memory_Cleaner
             base.SetVisibleCore(value);
         }
 
-        private void Exit(Object sender, EventArgs e)
-        {
-            Application.Exit();
-            UnregisterHotKey(this.Handle, 1);
-        }
-
-        public ulong GetAvailableMemory()
+        ulong GetAvailableMemory()
         {
             MEMORYSTATUSEX statex = new MEMORYSTATUSEX();
             statex.dwLength = 64;
@@ -490,7 +472,7 @@ namespace Memory_Cleaner
             return statex.ullAvailPhys;
         }
 
-        public ulong GetTotalMemory()
+        ulong GetTotalMemory()
         {
             MEMORYSTATUSEX statex = new MEMORYSTATUSEX();
             statex.dwLength = 64;
@@ -498,36 +480,30 @@ namespace Memory_Cleaner
             return statex.ullTotalPhys;
         }
 
-        private void SetTimerRes()
+        void SetTimerRes()
         {
-            uint DesiredResolution = (Convert.ToUInt32(SettingsForm.DesiredTimerResolution.Value));
-            bool SetResolution = true;
-            uint CurrentResolution = 156250;
-            NtSetTimerResolution(DesiredResolution, SetResolution, ref CurrentResolution);
+            NtSetTimerResolution(Convert.ToUInt32(SettingsForm.DesiredTimerResolution.Value), true, ref CurrentResolution);
         }
 
-        private void UnSetTimerRes()
+        void UnSetTimerRes()
         {
-            uint DesiredResolution = (Convert.ToUInt32(SettingsForm.DesiredTimerResolution.Value));
-            bool SetResolution = false;
-            uint CurrentResolution = 156250;
-            NtSetTimerResolution(DesiredResolution, SetResolution, ref CurrentResolution);
+            NtSetTimerResolution(Convert.ToUInt32(SettingsForm.DesiredTimerResolution.Value), false, ref CurrentResolution);
         }
 
-        private Timer GetTimerRes()
+        Timer GetTimerRes()
         {
             var a = new Timer();
-            var result = NtQueryTimerResolution(out a.PeriodMin, out a.PeriodMax, out a.PeriodCurrent);
+            NtQueryTimerResolution(out a.min, out a.max, out a.cur);
             return a;
         }
 
-        private void Minimize()
+        void Minimize()
         {
             this.Hide();
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void Maximize()
+        void Maximize()
         {
             this.allowVisible = true;
             this.Show();
@@ -535,525 +511,34 @@ namespace Memory_Cleaner
             this.ShowInTaskbar = true;
         }
 
-        public void RegisterHotkey()
+        void RegisterHotkey()
         {
-            switch (SettingsForm.HotkeyToCleanMemory.Text)
+            Keys a;
+            Enum.TryParse(SettingsForm.HotkeyToCleanMemory.Text.Replace("Shift + ", "").Replace("Control + ", "").Replace("Alt + ", ""), out a);
+
+            if (SettingsForm.HotkeyToCleanMemory.Text.Contains("Shift"))
             {
-                case "F1":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F1.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F1.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F1.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F1.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F2":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F2.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F2.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F2.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F2.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F3":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F3.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F3.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F3.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F3.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F4":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F4.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F4.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F4.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F4.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F5":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F5.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F5.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F5.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F5.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F6":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F6.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F6.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F6.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F6.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F7":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F7.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F7.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F7.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F7.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F8":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F8.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F8.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F8.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F8.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F9":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F9.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F9.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F9.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F9.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F10":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F10.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F10.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F10.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F10.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "F11":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.F11.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F11.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.F11.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.F11.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "Home":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.Home.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.Home.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.Home.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.Home.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "Insert":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.Insert.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.Insert.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.Insert.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.Insert.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "PageUp":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.PageUp.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.PageUp.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.PageUp.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.PageUp.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "PageDown":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.PageDown.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.PageDown.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.PageDown.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.PageDown.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case "CapsLock":
-                    {
-                        switch (SettingsForm.HotkeyModifierKey.Text)
-                        {
-                            case "None":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.None, Keys.CapsLock.GetHashCode());
-                                    break;
-                                }
-                            case "Alt":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.CapsLock.GetHashCode());
-                                    break;
-                                }
-                            case "Ctrl":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Ctrl, Keys.CapsLock.GetHashCode());
-                                    break;
-                                }
-                            case "Shift":
-                                {
-                                    UnregisterHotKey(this.Handle, 1);
-                                    RegisterHotKey(this.Handle, 1, (int)KeyModifier.Shift, Keys.CapsLock.GetHashCode());
-                                    break;
-                                }
-                        }
-                        break;
-                    }
+                UnregisterHotKey(this.Handle, 1);
+                RegisterHotKey(this.Handle, 1, (int)4, a.GetHashCode());
+            }
+            else if (SettingsForm.HotkeyToCleanMemory.Text.Contains("Control"))
+            {
+                UnregisterHotKey(this.Handle, 1);
+                RegisterHotKey(this.Handle, 1, (int)2, a.GetHashCode());
+            }
+            else if (SettingsForm.HotkeyToCleanMemory.Text.Contains("Alt"))
+            {
+                UnregisterHotKey(this.Handle, 1);
+                RegisterHotKey(this.Handle, 1, (int)1, a.GetHashCode());
+            }
+            else
+            {
+                UnregisterHotKey(this.Handle, 1);
+                RegisterHotKey(this.Handle, 1, (int)0, a.GetHashCode());
             }
         }
 
-        public void Timer()
+        void Timer()
         {
             switch (SettingsForm.TimerPollingInterval.Text)
             {
@@ -1158,7 +643,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void EmptyWorkingSet()
+        void EmptyWorkingSet()
         {
             string ProcessName = string.Empty;
             Process[] allProcesses = Process.GetProcesses();
@@ -1179,7 +664,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void ClearStandbyList()
+        void ClearStandbyList()
         {
             try
             {
@@ -1211,7 +696,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private static bool SetIncreasePrivilege(string privilegeName)
+        static bool SetIncreasePrivilege(string privilegeName)
         {
             using (WindowsIdentity current = WindowsIdentity.GetCurrent(TokenAccessLevels.Query | TokenAccessLevels.AdjustPrivileges))
             {
@@ -1232,13 +717,13 @@ namespace Memory_Cleaner
             }
         }
 
-        private void UpdateValues()
+        void UpdateValues()
         {
             AvailableMemory.Text = "Available: " + (GetAvailableMemory() / 1048576) + " MB";
             TotalMemory.Text = "Total: " + (GetTotalMemory() / 1048576) + " MB";
-            CurrentTimerRes.Text = "Current: " + (GetTimerRes().PeriodCurrent / 10000.0) + " ms";
-            MaxTimerRes.Text = "Max: " + (GetTimerRes().PeriodMax / 10000.0) + " ms";
-            MinTimerRes.Text = "Min: " + (GetTimerRes().PeriodMin / 10000.0) + " ms";
+            CurrentTimerRes.Text = "Current: " + (GetTimerRes().cur / 10000.0) + " ms";
+            MaxTimerRes.Text = "Max: " + (GetTimerRes().max / 10000.0) + " ms";
+            MinTimerRes.Text = "Min: " + (GetTimerRes().min / 10000.0) + " ms";
         }
 
         protected override void WndProc(ref Message m)
@@ -1277,7 +762,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void Timer1_Tick(object sender, EventArgs e)
+        void Timer1_Tick(object sender, EventArgs e)
         {
             UpdateValues();
         }

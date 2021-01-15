@@ -1,7 +1,7 @@
 ﻿﻿/*
     Memory Cleaner
 
-    Copyright (C) 2020 Danske
+    Copyright (C) 2021 Danske
 
     This file is part of Memory Cleaner
 
@@ -61,7 +61,7 @@ namespace Memory_Cleaner
             this.MenuItemFile = new System.Windows.Forms.MenuItem();
             this.MenuItemAbout = new System.Windows.Forms.MenuItem();
             this.MenuItemHelp = new System.Windows.Forms.MenuItem();
-            this.m = new System.Windows.Forms.MainMenu(this.components);
+            this.MainMenu = new System.Windows.Forms.MainMenu(this.components);
             this.ContextMenuStrip.SuspendLayout();
             this.GroupBoxTimerResolution.SuspendLayout();
             this.TableLayoutPanel1.SuspendLayout();
@@ -284,9 +284,9 @@ namespace Memory_Cleaner
             this.MenuItemAbout});
             this.MenuItemHelp.Text = "Help";
             // 
-            // m
+            // MainMenu
             // 
-            this.m.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.MainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.MenuItemFile,
             this.MenuItemHelp});
             // 
@@ -300,7 +300,7 @@ namespace Memory_Cleaner
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Menu = this.m;
+            this.Menu = this.MainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Memory Cleaner";
@@ -341,6 +341,6 @@ namespace Memory_Cleaner
         private System.Windows.Forms.MenuItem MenuItemFile;
         private System.Windows.Forms.MenuItem MenuItemAbout;
         private System.Windows.Forms.MenuItem MenuItemHelp;
-        private System.Windows.Forms.MainMenu m;
+        private System.Windows.Forms.MainMenu MainMenu;
     }
 }

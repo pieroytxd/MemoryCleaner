@@ -1,7 +1,7 @@
 ﻿﻿/*
     Memory Cleaner
 
-    Copyright (C) 2020 Danske
+    Copyright (C) 2021 Danske
 
     This file is part of Memory Cleaner
 
@@ -42,10 +42,8 @@ namespace Memory_Cleaner
             this.ButtonReset = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.HotkeyModifierKey = new System.Windows.Forms.ComboBox();
-            this.HotkeyToCleanMemory = new System.Windows.Forms.ComboBox();
             this.LabelHotkeyToCleanMemory = new System.Windows.Forms.Label();
-            this.LabelHotkeyModifierKey = new System.Windows.Forms.Label();
+            this.HotkeyToCleanMemory = new System.Windows.Forms.TextBox();
             this.CheckBoxEnableClearingOfTheStandbyList = new System.Windows.Forms.CheckBox();
             this.CheckBoxEnableEmptyingOfTheWorkingSet = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -78,7 +76,7 @@ namespace Memory_Cleaner
             // ButtonReset
             // 
             this.ButtonReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonReset.Location = new System.Drawing.Point(4, 389);
+            this.ButtonReset.Location = new System.Drawing.Point(4, 365);
             this.ButtonReset.Name = "ButtonReset";
             this.ButtonReset.Size = new System.Drawing.Size(75, 23);
             this.ButtonReset.TabIndex = 53;
@@ -91,7 +89,7 @@ namespace Memory_Cleaner
             this.groupBox1.Controls.Add(this.TableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(312, 122);
+            this.groupBox1.Size = new System.Drawing.Size(312, 98);
             this.groupBox1.TabIndex = 55;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Memory cleaning settings";
@@ -102,92 +100,40 @@ namespace Memory_Cleaner
             this.TableLayoutPanel1.ColumnCount = 2;
             this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.72727F));
             this.TableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.27273F));
-            this.TableLayoutPanel1.Controls.Add(this.HotkeyModifierKey, 1, 1);
-            this.TableLayoutPanel1.Controls.Add(this.HotkeyToCleanMemory, 1, 0);
             this.TableLayoutPanel1.Controls.Add(this.LabelHotkeyToCleanMemory, 0, 0);
-            this.TableLayoutPanel1.Controls.Add(this.LabelHotkeyModifierKey, 0, 1);
-            this.TableLayoutPanel1.Controls.Add(this.CheckBoxEnableClearingOfTheStandbyList, 0, 2);
-            this.TableLayoutPanel1.Controls.Add(this.CheckBoxEnableEmptyingOfTheWorkingSet, 0, 3);
-            this.TableLayoutPanel1.Location = new System.Drawing.Point(6, 16);
+            this.TableLayoutPanel1.Controls.Add(this.HotkeyToCleanMemory, 1, 0);
+            this.TableLayoutPanel1.Controls.Add(this.CheckBoxEnableClearingOfTheStandbyList, 0, 1);
+            this.TableLayoutPanel1.Controls.Add(this.CheckBoxEnableEmptyingOfTheWorkingSet, 0, 2);
+            this.TableLayoutPanel1.Location = new System.Drawing.Point(6, 19);
             this.TableLayoutPanel1.Name = "TableLayoutPanel1";
-            this.TableLayoutPanel1.RowCount = 4;
-            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.TableLayoutPanel1.RowCount = 3;
+            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.TableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.TableLayoutPanel1.Size = new System.Drawing.Size(300, 100);
+            this.TableLayoutPanel1.Size = new System.Drawing.Size(300, 73);
             this.TableLayoutPanel1.TabIndex = 61;
-            // 
-            // HotkeyModifierKey
-            // 
-            this.HotkeyModifierKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.HotkeyModifierKey.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.HotkeyModifierKey.FormattingEnabled = true;
-            this.HotkeyModifierKey.Items.AddRange(new object[] {
-            "None",
-            "Alt",
-            "Ctrl",
-            "Shift"});
-            this.HotkeyModifierKey.Location = new System.Drawing.Point(221, 28);
-            this.HotkeyModifierKey.Name = "HotkeyModifierKey";
-            this.HotkeyModifierKey.Size = new System.Drawing.Size(76, 21);
-            this.HotkeyModifierKey.TabIndex = 14;
-            this.HotkeyModifierKey.Text = "None";
-            this.HotkeyModifierKey.TextChanged += new System.EventHandler(this.HotkeyModifierKey_TextChanged);
-            // 
-            // HotkeyToCleanMemory
-            // 
-            this.HotkeyToCleanMemory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.HotkeyToCleanMemory.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.HotkeyToCleanMemory.FormattingEnabled = true;
-            this.HotkeyToCleanMemory.Items.AddRange(new object[] {
-            "F1",
-            "F2",
-            "F3",
-            "F4",
-            "F5",
-            "F6",
-            "F7",
-            "F8",
-            "F9",
-            "F10",
-            "F11",
-            "Home",
-            "Insert",
-            "PageUp",
-            "PageDown",
-            "CapsLock"});
-            this.HotkeyToCleanMemory.Location = new System.Drawing.Point(221, 3);
-            this.HotkeyToCleanMemory.Name = "HotkeyToCleanMemory";
-            this.HotkeyToCleanMemory.Size = new System.Drawing.Size(76, 21);
-            this.HotkeyToCleanMemory.TabIndex = 15;
-            this.HotkeyToCleanMemory.Text = "F10";
-            this.HotkeyToCleanMemory.TextChanged += new System.EventHandler(this.HotkeyToCleanMemory_TextChanged);
             // 
             // LabelHotkeyToCleanMemory
             // 
             this.LabelHotkeyToCleanMemory.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.LabelHotkeyToCleanMemory.AutoSize = true;
             this.LabelHotkeyToCleanMemory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelHotkeyToCleanMemory.Location = new System.Drawing.Point(3, 6);
+            this.LabelHotkeyToCleanMemory.Location = new System.Drawing.Point(3, 5);
             this.LabelHotkeyToCleanMemory.Name = "LabelHotkeyToCleanMemory";
             this.LabelHotkeyToCleanMemory.Size = new System.Drawing.Size(124, 13);
             this.LabelHotkeyToCleanMemory.TabIndex = 23;
             this.LabelHotkeyToCleanMemory.Text = "Hotkey to clean memory:";
             this.LabelHotkeyToCleanMemory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // LabelHotkeyModifierKey
+            // HotkeyToCleanMemory
             // 
-            this.LabelHotkeyModifierKey.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.LabelHotkeyModifierKey.AutoSize = true;
-            this.LabelHotkeyModifierKey.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelHotkeyModifierKey.Location = new System.Drawing.Point(3, 31);
-            this.LabelHotkeyModifierKey.Name = "LabelHotkeyModifierKey";
-            this.LabelHotkeyModifierKey.Size = new System.Drawing.Size(103, 13);
-            this.LabelHotkeyModifierKey.TabIndex = 24;
-            this.LabelHotkeyModifierKey.Text = "Hotkey modifier key:";
-            this.LabelHotkeyModifierKey.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.HotkeyToCleanMemory.Location = new System.Drawing.Point(221, 3);
+            this.HotkeyToCleanMemory.Name = "HotkeyToCleanMemory";
+            this.HotkeyToCleanMemory.ReadOnly = true;
+            this.HotkeyToCleanMemory.Size = new System.Drawing.Size(76, 20);
+            this.HotkeyToCleanMemory.TabIndex = 27;
+            this.HotkeyToCleanMemory.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HotkeyToCleanMemory_KeyDown);
             // 
             // CheckBoxEnableClearingOfTheStandbyList
             // 
@@ -195,7 +141,7 @@ namespace Memory_Cleaner
             this.CheckBoxEnableClearingOfTheStandbyList.AutoSize = true;
             this.CheckBoxEnableClearingOfTheStandbyList.Checked = true;
             this.CheckBoxEnableClearingOfTheStandbyList.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxEnableClearingOfTheStandbyList.Location = new System.Drawing.Point(3, 54);
+            this.CheckBoxEnableClearingOfTheStandbyList.Location = new System.Drawing.Point(3, 27);
             this.CheckBoxEnableClearingOfTheStandbyList.Name = "CheckBoxEnableClearingOfTheStandbyList";
             this.CheckBoxEnableClearingOfTheStandbyList.Size = new System.Drawing.Size(184, 17);
             this.CheckBoxEnableClearingOfTheStandbyList.TabIndex = 25;
@@ -209,7 +155,7 @@ namespace Memory_Cleaner
             this.CheckBoxEnableEmptyingOfTheWorkingSet.AutoSize = true;
             this.CheckBoxEnableEmptyingOfTheWorkingSet.Checked = true;
             this.CheckBoxEnableEmptyingOfTheWorkingSet.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxEnableEmptyingOfTheWorkingSet.Location = new System.Drawing.Point(3, 79);
+            this.CheckBoxEnableEmptyingOfTheWorkingSet.Location = new System.Drawing.Point(3, 52);
             this.CheckBoxEnableEmptyingOfTheWorkingSet.Name = "CheckBoxEnableEmptyingOfTheWorkingSet";
             this.CheckBoxEnableEmptyingOfTheWorkingSet.Size = new System.Drawing.Size(191, 17);
             this.CheckBoxEnableEmptyingOfTheWorkingSet.TabIndex = 26;
@@ -220,7 +166,7 @@ namespace Memory_Cleaner
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.TableLayoutPanel2);
-            this.groupBox2.Location = new System.Drawing.Point(4, 132);
+            this.groupBox2.Location = new System.Drawing.Point(4, 108);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(312, 72);
             this.groupBox2.TabIndex = 56;
@@ -309,7 +255,7 @@ namespace Memory_Cleaner
             // ButtonClose
             // 
             this.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonClose.Location = new System.Drawing.Point(241, 389);
+            this.ButtonClose.Location = new System.Drawing.Point(241, 365);
             this.ButtonClose.Name = "ButtonClose";
             this.ButtonClose.Size = new System.Drawing.Size(75, 23);
             this.ButtonClose.TabIndex = 59;
@@ -320,7 +266,7 @@ namespace Memory_Cleaner
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.TableLayoutPanel3);
-            this.groupBox3.Location = new System.Drawing.Point(4, 210);
+            this.groupBox3.Location = new System.Drawing.Point(4, 186);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(312, 72);
             this.groupBox3.TabIndex = 57;
@@ -381,7 +327,7 @@ namespace Memory_Cleaner
             // 
             this.GroupBoxStartupSettings.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.GroupBoxStartupSettings.Controls.Add(this.TableLayoutPanel4);
-            this.GroupBoxStartupSettings.Location = new System.Drawing.Point(4, 288);
+            this.GroupBoxStartupSettings.Location = new System.Drawing.Point(4, 264);
             this.GroupBoxStartupSettings.Name = "GroupBoxStartupSettings";
             this.GroupBoxStartupSettings.Size = new System.Drawing.Size(312, 95);
             this.GroupBoxStartupSettings.TabIndex = 71;
@@ -448,7 +394,7 @@ namespace Memory_Cleaner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(320, 416);
+            this.ClientSize = new System.Drawing.Size(320, 391);
             this.Controls.Add(this.GroupBoxStartupSettings);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.ButtonClose);
@@ -488,10 +434,7 @@ namespace Memory_Cleaner
         public System.Windows.Forms.GroupBox groupBox2;
         public System.Windows.Forms.Button ButtonClose;
         public System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
-        public System.Windows.Forms.ComboBox HotkeyModifierKey;
-        public System.Windows.Forms.ComboBox HotkeyToCleanMemory;
         public System.Windows.Forms.Label LabelHotkeyToCleanMemory;
-        public System.Windows.Forms.Label LabelHotkeyModifierKey;
         public System.Windows.Forms.CheckBox CheckBoxEnableClearingOfTheStandbyList;
         public System.Windows.Forms.CheckBox CheckBoxEnableEmptyingOfTheWorkingSet;
         public System.Windows.Forms.TableLayoutPanel TableLayoutPanel2;
@@ -508,5 +451,6 @@ namespace Memory_Cleaner
         public System.Windows.Forms.CheckBox CheckBoxStartMemoryCleanerOnSystemStartup;
         public System.Windows.Forms.CheckBox CheckBoxStartTimerResolutionAutomatically;
         public System.Windows.Forms.CheckBox CheckBoxStartMinimized;
+        public System.Windows.Forms.TextBox HotkeyToCleanMemory;
     }
 }

@@ -1,27 +1,27 @@
-﻿﻿/*
-    Memory Cleaner
+﻿/*
+   Memory Cleaner
 
-    Copyright (C) 2020 Danske
+   Copyright (C) 2021 Danske
 
-    This file is part of Memory Cleaner
+   This file is part of Memory Cleaner
 
-    Memory Cleaner is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Memory Cleaner is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-    Memory Cleaner is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Memory Cleaner is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Memory Cleaner.  If not, see <https://www.gnu.org/licenses/>.
+   You should have received a copy of the GNU General Public License
+   along with Memory Cleaner.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Windows.Forms;
 using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace Memory_Cleaner
 {
@@ -34,17 +34,47 @@ namespace Memory_Cleaner
             InitializeComponent();
         }
 
-        private void HotkeyToCleanMemory_TextChanged(object sender, EventArgs e)
+        void HotkeyToCleanMemory_KeyDown(object sender, KeyEventArgs e)
         {
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                if (e.KeyCode.ToString() == "ShiftKey")
+                {
+                }
+                else
+                {
+                    HotkeyToCleanMemory.Text = "Shift + " + e.KeyCode.ToString();
+                }
+            }
+            else if (Control.ModifierKeys == Keys.Control)
+            {
+                if (e.KeyCode.ToString() == "ControlKey")
+                {
+                }
+                else
+                {
+                    HotkeyToCleanMemory.Text = "Control + " + e.KeyCode.ToString();
+                }
+            }
+            else if (Control.ModifierKeys == Keys.Alt)
+            {
+                if (e.KeyCode.ToString() == "Menu")
+                {
+                }
+                else
+                {
+                    HotkeyToCleanMemory.Text = "Alt + " + e.KeyCode.ToString();
+                }
+            }
+            else
+            {
+                HotkeyToCleanMemory.Text = e.KeyCode.ToString();
+            }
+
             Settings.SetValue("HotkeyToCleanMemory", HotkeyToCleanMemory.Text);
         }
 
-        private void HotkeyModifierKey_TextChanged(object sender, EventArgs e)
-        {
-            Settings.SetValue("HotkeyModifierKey", HotkeyModifierKey.Text);
-        }
-
-        private void CheckBoxEnableClearingOfTheStandbyList_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxEnableClearingOfTheStandbyList_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckBoxEnableClearingOfTheStandbyList.Checked == true)
             {
@@ -56,7 +86,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void CheckBoxEnableEmptyingOfTheWorkingSet_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxEnableEmptyingOfTheWorkingSet_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckBoxEnableEmptyingOfTheWorkingSet.Checked == true)
             {
@@ -68,12 +98,12 @@ namespace Memory_Cleaner
             }
         }
 
-        private void DesiredTimerResolution_ValueChanged(object sender, EventArgs e)
+        void DesiredTimerResolution_ValueChanged(object sender, EventArgs e)
         {
             Settings.SetValue("DesiredTimerResolution", DesiredTimerResolution.Value);
         }
 
-        private void CheckBoxEnableCustomTimerResolution_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxEnableCustomTimerResolution_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckBoxEnableCustomTimerResolution.Checked == true)
             {
@@ -85,12 +115,12 @@ namespace Memory_Cleaner
             }
         }
 
-        private void TimerPollingInterval_SelectedIndexChanged(object sender, EventArgs e)
+        void TimerPollingInterval_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.SetValue("TimerPollingInterval", TimerPollingInterval.Text);
         }
 
-        private void CheckBoxEnableTimer_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxEnableTimer_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckBoxEnableTimer.Checked == true)
             {
@@ -102,7 +132,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void CheckBoxStartMinimized_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxStartMinimized_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckBoxStartMinimized.Checked == true)
             {
@@ -114,7 +144,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void CheckBoxStartTimerResolutionAutomatically_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxStartTimerResolutionAutomatically_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckBoxStartTimerResolutionAutomatically.Checked == true)
             {
@@ -126,7 +156,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void CheckBoxStartMemoryCleanerOnSystemStartup_CheckedChanged(object sender, EventArgs e)
+        void CheckBoxStartMemoryCleanerOnSystemStartup_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckBoxStartMemoryCleanerOnSystemStartup.Checked == true)
             {
@@ -138,7 +168,7 @@ namespace Memory_Cleaner
             }
         }
 
-        private void ButtonReset_Click(object sender, EventArgs e)
+        void ButtonReset_Click(object sender, EventArgs e)
         {
             switch (MessageBox.Show("Are you sure you want to reset all of the settings?", "Memory Cleaner", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
             {
@@ -155,9 +185,6 @@ namespace Memory_Cleaner
 
                         Settings.SetValue("EnableEmptyingOfTheWorkingSet", "1");
                         CheckBoxEnableEmptyingOfTheWorkingSet.Checked = true;
-
-                        Settings.SetValue("HotkeyModifierKey", "None");
-                        HotkeyModifierKey.Text = "None";
 
                         Settings.SetValue("HotkeyToCleanMemory", "F10");
                         HotkeyToCleanMemory.Text = "F10";
@@ -187,12 +214,12 @@ namespace Memory_Cleaner
             }
         }
 
-        private void ButtonClose_Click(object sender, EventArgs e)
+        void ButtonClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             MainForm MainForm = (MainForm)Application.OpenForms["MainForm"];
             MainForm.SaveSettings();

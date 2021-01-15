@@ -1,7 +1,7 @@
 ﻿﻿/*
     Memory Cleaner
 
-    Copyright (C) 2020 Danske
+    Copyright (C) 2021 Danske
 
     This file is part of Memory Cleaner
 

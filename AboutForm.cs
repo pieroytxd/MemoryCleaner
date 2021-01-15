@@ -1,7 +1,7 @@
 ﻿﻿/*
     Memory Cleaner
 
-    Copyright (C) 2020 Danske
+    Copyright (C) 2021 Danske
 
     This file is part of Memory Cleaner
 
@@ -32,27 +32,17 @@ namespace Memory_Cleaner
             InitializeComponent();
         }
 
-        private void LinkGitHub_Click(object sender, LinkLabelLinkClickedEventArgs e)
+        void LinkGitHub_Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://github.com/danskee");
         }
 
-        private void ButtonTwitter_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://twitter.com/danskexd");
-        }
-
-        private void ButtonDonate_Click(object sender, EventArgs e)
+        void ButtonDonate_Click(object sender, EventArgs e)
         {
             Process.Start("https://paypal.me/danskexd");
         }
 
-        private void ButtonDiscord_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://pastebin.com/QcUD4MMH");
-        }
-
-        private void ButtonClose_Click(object sender, EventArgs e)
+        void ButtonClose_Click(object sender, EventArgs e)
         {
             this.Close();
         }

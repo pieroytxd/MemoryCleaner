@@ -1,7 +1,7 @@
 ﻿﻿/*
     Memory Cleaner
 
-    Copyright (C) 2020 Danske
+    Copyright (C) 2021 Danske
 
     This file is part of Memory Cleaner
 
@@ -39,9 +39,7 @@ namespace Memory_Cleaner
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
-            this.ButtonTwitter = new System.Windows.Forms.Button();
             this.ButtonDonate = new System.Windows.Forms.Button();
-            this.ButtonDiscord = new System.Windows.Forms.Button();
             this.ButtonClose = new System.Windows.Forms.Button();
             this.TableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Info = new System.Windows.Forms.Label();
@@ -49,44 +47,18 @@ namespace Memory_Cleaner
             this.TableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // ButtonTwitter
-            // 
-            this.ButtonTwitter.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ButtonTwitter.AutoSize = true;
-            this.ButtonTwitter.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonTwitter.Location = new System.Drawing.Point(3, 102);
-            this.ButtonTwitter.Name = "ButtonTwitter";
-            this.ButtonTwitter.Size = new System.Drawing.Size(53, 23);
-            this.ButtonTwitter.TabIndex = 61;
-            this.ButtonTwitter.Text = "Twitter";
-            this.ButtonTwitter.UseVisualStyleBackColor = true;
-            this.ButtonTwitter.Click += new System.EventHandler(this.ButtonTwitter_Click);
-            // 
             // ButtonDonate
             // 
             this.ButtonDonate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ButtonDonate.AutoSize = true;
             this.ButtonDonate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonDonate.Location = new System.Drawing.Point(60, 102);
+            this.ButtonDonate.Location = new System.Drawing.Point(119, 102);
             this.ButtonDonate.Name = "ButtonDonate";
             this.ButtonDonate.Size = new System.Drawing.Size(56, 23);
             this.ButtonDonate.TabIndex = 60;
             this.ButtonDonate.Text = "Donate";
             this.ButtonDonate.UseVisualStyleBackColor = true;
             this.ButtonDonate.Click += new System.EventHandler(this.ButtonDonate_Click);
-            // 
-            // ButtonDiscord
-            // 
-            this.ButtonDiscord.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ButtonDiscord.AutoSize = true;
-            this.ButtonDiscord.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonDiscord.Location = new System.Drawing.Point(120, 102);
-            this.ButtonDiscord.Name = "ButtonDiscord";
-            this.ButtonDiscord.Size = new System.Drawing.Size(57, 23);
-            this.ButtonDiscord.TabIndex = 59;
-            this.ButtonDiscord.Text = "Discord";
-            this.ButtonDiscord.UseVisualStyleBackColor = true;
-            this.ButtonDiscord.Click += new System.EventHandler(this.ButtonDiscord_Click);
             // 
             // ButtonClose
             // 
@@ -124,7 +96,7 @@ namespace Memory_Cleaner
             this.Info.Name = "Info";
             this.Info.Size = new System.Drawing.Size(136, 65);
             this.Info.TabIndex = 0;
-            this.Info.Text = "Memory Cleaner\r\nVersion 1.6.1\r\n\r\nCopyright 2020 Danske\r\nunder GNU GPL v3 license";
+            this.Info.Text = "Memory Cleaner\r\nVersion 1.6.2\r\n\r\nCopyright 2021 Danske\r\nunder GNU GPL v3 license";
             this.Info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // LinkGitHub
@@ -147,9 +119,7 @@ namespace Memory_Cleaner
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(231, 128);
-            this.Controls.Add(this.ButtonTwitter);
             this.Controls.Add(this.ButtonDonate);
-            this.Controls.Add(this.ButtonDiscord);
             this.Controls.Add(this.ButtonClose);
             this.Controls.Add(this.TableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -168,10 +138,7 @@ namespace Memory_Cleaner
         }
 
         #endregion
-
-        private System.Windows.Forms.Button ButtonTwitter;
         private System.Windows.Forms.Button ButtonDonate;
-        private System.Windows.Forms.Button ButtonDiscord;
         private System.Windows.Forms.Button ButtonClose;
         private System.Windows.Forms.TableLayoutPanel TableLayoutPanel1;
         private System.Windows.Forms.Label Info;
