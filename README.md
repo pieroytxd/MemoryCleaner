@@ -6,6 +6,7 @@ Lightweight application for forcing the timer resolution and for cleaning the st
 
 ## Sytem Requirements
 - Windows 7 64-bit
+- .NET Framework 4.6
 
 ## Donation
 - [PayPal](https://www.paypal.me/danskexd)
