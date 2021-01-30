@@ -9,7 +9,7 @@ Lightweight application for forcing the timer resolution and for cleaning the st
 - .NET Framework 4.6
 
 ## Donation
-- [PayPal](https://www.paypal.me/danskexd)
+- [PayPal](https://www.paypal.me/dansketweaks)
 
 ## License
 Memory Cleaner is licensed under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license. For more details, see the [LICENSE](https://github.com/danskee/MemoryCleaner/blob/main/LICENSE).
