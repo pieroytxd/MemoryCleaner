@@ -53,7 +53,7 @@ namespace Memory_Cleaner
             this.ButtonDonate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ButtonDonate.AutoSize = true;
             this.ButtonDonate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonDonate.Location = new System.Drawing.Point(192, 93);
+            this.ButtonDonate.Location = new System.Drawing.Point(192, 88);
             this.ButtonDonate.Name = "ButtonDonate";
             this.ButtonDonate.Size = new System.Drawing.Size(75, 23);
             this.ButtonDonate.TabIndex = 60;
@@ -66,7 +66,7 @@ namespace Memory_Cleaner
             this.ButtonClose.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ButtonClose.AutoSize = true;
             this.ButtonClose.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonClose.Location = new System.Drawing.Point(273, 93);
+            this.ButtonClose.Location = new System.Drawing.Point(273, 88);
             this.ButtonClose.Name = "ButtonClose";
             this.ButtonClose.Size = new System.Drawing.Size(75, 23);
             this.ButtonClose.TabIndex = 58;
