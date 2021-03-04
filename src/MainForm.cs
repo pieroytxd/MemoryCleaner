@@ -689,7 +689,7 @@ namespace Memory_Cleaner
         {
             Settings.SetValue("CheckedForUpdates", "True", RegistryValueKind.String);
 
-            int currentversion = Convert.ToInt32("1.6.3".Replace(".", ""));
+            int currentversion = Convert.ToInt32("1.6.4".Replace(".", ""));
             newestver = wc.DownloadString("https://raw.githubusercontent.com/danskee/MemoryCleaner/main/version").Replace("\n", "").Replace("\r", "");
             int newestversion = Convert.ToInt32(newestver.Replace(".", ""));
 
