@@ -104,9 +104,9 @@ namespace Memory_Cleaner
         public string newestver = "";
         public uint CurrentResolution;
         WebClient wc = new WebClient();
-        AboutForm AboutForm = new AboutForm("1.6.3");
+        AboutDialog AboutDialog = new AboutDialog("1.6.4");
         SettingsForm SettingsForm = new SettingsForm();
-        LicenseAgreementForm LicenseAgreementForm = new LicenseAgreementForm();
+        LicenseAgreementDialog LicenseAgreementDialog = new LicenseAgreementDialog();
         RegistryKey Settings = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner", true);
         RegistryKey Startup = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
 
@@ -125,7 +125,7 @@ namespace Memory_Cleaner
 
             if (Settings.GetValue("LicenseAccepted").ToString() == "False")
             {
-                LicenseAgreementForm.ShowDialog(this);
+                LicenseAgreementDialog.ShowDialog(this);
             }
 
             // Checked For Updates
@@ -319,7 +319,7 @@ namespace Memory_Cleaner
 
         private void MenuItemAbout_Click(object sender, EventArgs e)
         {
-            AboutForm.ShowDialog(this);
+            AboutDialog.ShowDialog(this);
             UpdateValues();
         }
 
