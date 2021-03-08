@@ -39,7 +39,6 @@ namespace Memory_Cleaner
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutDialog));
-            this.ButtonDonate = new System.Windows.Forms.Button();
             this.ButtonClose = new System.Windows.Forms.Button();
             this.LabelMemoryCleaner = new System.Windows.Forms.Label();
             this.LinkGithub = new System.Windows.Forms.LinkLabel();
@@ -47,19 +46,6 @@ namespace Memory_Cleaner
             this.Line = new System.Windows.Forms.Label();
             this.LabelCopyright = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // ButtonDonate
-            // 
-            this.ButtonDonate.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ButtonDonate.AutoSize = true;
-            this.ButtonDonate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonDonate.Location = new System.Drawing.Point(192, 88);
-            this.ButtonDonate.Name = "ButtonDonate";
-            this.ButtonDonate.Size = new System.Drawing.Size(75, 23);
-            this.ButtonDonate.TabIndex = 60;
-            this.ButtonDonate.Text = "Donate";
-            this.ButtonDonate.UseVisualStyleBackColor = true;
-            this.ButtonDonate.Click += new System.EventHandler(this.ButtonDonate_Click);
             // 
             // ButtonClose
             // 
@@ -134,7 +120,7 @@ namespace Memory_Cleaner
             this.LabelCopyright.TabIndex = 63;
             this.LabelCopyright.Text = resources.GetString("LabelCopyright.Text");
             // 
-            // AboutForm
+            // AboutDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -144,13 +130,12 @@ namespace Memory_Cleaner
             this.Controls.Add(this.LabelAbout);
             this.Controls.Add(this.LinkGithub);
             this.Controls.Add(this.LabelMemoryCleaner);
-            this.Controls.Add(this.ButtonDonate);
             this.Controls.Add(this.ButtonClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AboutForm";
+            this.Name = "AboutDialog";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
@@ -161,7 +146,6 @@ namespace Memory_Cleaner
         }
 
         #endregion
-        private System.Windows.Forms.Button ButtonDonate;
         private System.Windows.Forms.Button ButtonClose;
         private System.Windows.Forms.Label LabelMemoryCleaner;
         private System.Windows.Forms.LinkLabel LinkGithub;

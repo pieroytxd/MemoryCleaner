@@ -104,7 +104,7 @@ namespace Memory_Cleaner
         public string newestver = "";
         public uint CurrentResolution;
         WebClient wc = new WebClient();
-        AboutDialog AboutDialog = new AboutDialog("1.6.4");
+        AboutDialog AboutDialog = new AboutDialog("1.6.5");
         SettingsForm SettingsForm = new SettingsForm();
         LicenseAgreementDialog LicenseAgreementDialog = new LicenseAgreementDialog();
         RegistryKey Settings = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Memory Cleaner", true);
@@ -689,7 +689,7 @@ namespace Memory_Cleaner
         {
             Settings.SetValue("CheckedForUpdates", "True", RegistryValueKind.String);
 
-            int currentversion = Convert.ToInt32("1.6.4".Replace(".", ""));
+            int currentversion = Convert.ToInt32("1.6.5".Replace(".", ""));
             newestver = wc.DownloadString("https://raw.githubusercontent.com/danskee/MemoryCleaner/main/version").Replace("\n", "").Replace("\r", "");
             int newestversion = Convert.ToInt32(newestver.Replace(".", ""));
 
